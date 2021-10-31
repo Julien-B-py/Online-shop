@@ -1,0 +1,27 @@
+.display-items {
+    background-color:gray;
+    border-radius:10px;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    margin: 0 auto;
+    max-width: 640px;
+    padding:10px;
+}
+
+.item {
+    background:white;
+    border:solid 1px;
+    display:flex;
+    height:190px;
+    justify-content:center;
+    margin:5px;
+    padding:5px;
+    width:190px;
+}
+
+.item-img {
+    max-height:100%;
+    max-width:100%;
+}
+
