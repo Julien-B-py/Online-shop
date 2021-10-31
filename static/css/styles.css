@@ -1,5 +1,12 @@
-body {
+.buy-button {
+    align-items:center;
+    background:#023047;
+    border-radius:5px;
+    display:flex;
+    height:80%;
+    justify-content:center;
     margin:0;
+    width:45%;
 }
 
 .custom-header {
@@ -7,18 +14,11 @@ body {
     width:100%;
 }
 
-.custom-nav-link {
-    color:white;
-}
-
-.custom-nav-link:focus, .custom-nav-link:hover {
-    color:white;
-}
-
 .custom-navbar {
     align-items:center;
-    background:black;
+    background:#023047;
     border-radius: 0;
+    box-shadow: rgba(2, 48, 71, 0.24) 0px 3px 8px;
     display:flex;
     height:70px;
     justify-content:center;
@@ -26,6 +26,7 @@ body {
     position:fixed;
     top:0;
     width: 100%;
+    z-index:200;
 }
 
 .custom-navbar-nav {
@@ -34,8 +35,22 @@ body {
     width:1000px;
 }
 
+.footer {
+    align-items:center;
+    background:#023047;
+    display:flex;
+    font-size: 12px;
+    height:200px;
+    justify-content:center;
+    margin-top: 100px;
+}
+
+.footer hr {
+    border-color: #FFB703;
+}
+
 .header {
-    font-family: 'Roboto', sans-serif;
+    color:#023047;
     font-size: 34px;
     margin-bottom:26px;
 }
@@ -43,7 +58,7 @@ body {
 .item {
     background:white;
     border-radius:5px;
-    border:solid 1px;
+    border:solid 1px #219EBC;
     display:flex;
     height:200px;
     justify-content:center;
@@ -57,9 +72,21 @@ body {
     max-width:100%;
 }
 
-.items-container {
-    background-color:gray;
+.item-price {
+    align-items:center;
+    background:#023047;
     border-radius:5px;
+    display:flex;
+    height:80%;
+    justify-content:center;
+    margin:0;
+    width:45%;
+}
+
+.items-container {
+    background-color:#023047;
+    border-radius:5px;
+    box-shadow: rgba(2, 48, 71, 0.24) 0px 3px 8px;
     display:flex;
     flex-wrap: wrap;
     justify-content:center;
@@ -67,8 +94,41 @@ body {
     padding:5px;
 }
 
+.price-buy {
+    align-items:center;
+    background:rgba(142, 202,230, 0.5);
+    bottom:0;
+    display:flex;
+    height:50px;
+    justify-content:space-evenly;
+    position:absolute;
+    width:200px;
+}
+
 .shop {
     margin: 0 auto;
     max-width: 650px;
+}
+
+.wrap-item {
+    display:flex;
+    justify-content:center;
+    position:relative;
+}
+
+a {
+    color:#FFB703;
+    text-decoration:none;
+}
+
+a:focus, a:hover {
+    color:#FB8500;
+}
+
+body {
+    background:#8ECAE6;
+    color:#FFB703;
+    font-family: 'Roboto', sans-serif;
+    margin:0;
 }
 
