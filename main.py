@@ -10,7 +10,7 @@ def home():
 
 @app.route("/checkout")
 def checkout():
-    return "cart"
+    return render_template("cart.html")
 
 
 if __name__ == "__main__":
