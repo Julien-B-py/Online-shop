@@ -4,8 +4,23 @@
 
 <div class="shop-container">
 
+
+
   <div class="shop">
     <div class="header">Your shopping cart</div>
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class=flashes>
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+
     <div class="cart-items-container">
 
       <div class="cart-listing-header">
@@ -26,7 +41,7 @@
         <div class="cart-item-name">{{item.item}}</div>
         <div class="cart-item-price">{{ "%.2f"|format(item.price) }}€</div>
         <div class="cart-item-qty">{{item.count}}</div>
-        <div class="cart-item-remove">Remove</div>
+        <a href="{{url_for('remove_from_cart',item_id=item.id)}}" class="cart-item-remove">Remove</a>
       </div>
       {% endfor %}
 
@@ -40,9 +55,9 @@
   <div class="cart-total">Estimated total: <div class="cart-total-price">{{ "%.2f"|format(total) }}€</div></div>
   <div class="cart-buttons">
 
-  <a href="{{url_for('home')}}" class="purchase-button">Continue shopping</a>
-          <a href="" class="purchase-button">Purchase</a>
-  <a href="{{url_for('clear_cart')}}" class="purchase-button">Remove all</a>
+    <a href="{{url_for('home')}}" class="purchase-button">Continue shopping</a>
+    <a href="{{url_for('checkout')}}" class="purchase-button">Purchase</a>
+    <a href="{{url_for('clear_cart')}}" class="purchase-button">Remove all</a>
 
   </div>
 

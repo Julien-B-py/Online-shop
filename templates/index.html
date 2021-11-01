@@ -5,8 +5,23 @@
 
 <div class="shop-container">
 
+
+
+
+
     <div class="shop">
         <div class="header">All items</div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class=flashes>
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
         <div class="items-container">
             {% for item in store_data %}
             <div class="item">
