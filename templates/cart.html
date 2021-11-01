@@ -1,5 +1,7 @@
 {% include "header.html" %}
 
+
+
 <div class="shop-container">
 
   <div class="shop">
@@ -7,33 +9,27 @@
     <div class="cart-items-container">
 
       <div class="cart-listing-header">
-        <div>image</div>
-        <div>article</div>
-        <div>prix</div>
-        <div>qte</div>
-        <div>remove</div>
+        <div></div>
+        <div>Article</div>
+        <div>Price</div>
+        <div>Quantity</div>
+        <div></div>
 
       </div>
 
-      <div class="cart-item">
-        <div class="cart-item-img">
-          <img src="{{url_for('static', filename='images/test.jpg')}}" alt="">
-        </div>
-        <div class="cart-item-name">Apple AirPods (2nd Generation)</div>
-        <div class="cart-item-price">7,77€</div>
-        <div class="cart-item-qty">1</div>
-        <div class="cart-item-remove">Remove</div>
-      </div>
+      {% for item in final_cart %}
 
       <div class="cart-item">
         <div class="cart-item-img">
-          <img src="{{url_for('static', filename='images/test2.jpg')}}" alt="">
+          <img src="{{url_for('static', filename='images/'+item.image)}}" alt="">
         </div>
-        <div class="cart-item-name">Nintendo Switch with Gray Joy‑Con - HAC-001(-01)</div>
-        <div class="cart-item-price">$315.00</div>
-        <div class="cart-item-qty">1</div>
+        <div class="cart-item-name">{{item.item}}</div>
+        <div class="cart-item-price">{{ "%.2f"|format(item.price) }}€</div>
+        <div class="cart-item-qty">{{item.count}}</div>
         <div class="cart-item-remove">Remove</div>
       </div>
+      {% endfor %}
+
 
 
     </div>
@@ -41,8 +37,15 @@
 
 
 
-  <div class="cart-total">Estimated total: <div class="cart-total-price">11111150,10€</div></div>
-  <a href="" class="purchase-button">Purchase</a>
+  <div class="cart-total">Estimated total: <div class="cart-total-price">{{ "%.2f"|format(total) }}€</div></div>
+  <div class="cart-buttons">
+
+  <a href="{{url_for('home')}}" class="purchase-button">Continue shopping</a>
+          <a href="" class="purchase-button">Purchase</a>
+  <a href="{{url_for('clear_cart')}}" class="purchase-button">Remove all</a>
+
+  </div>
+
 
 
 </div>

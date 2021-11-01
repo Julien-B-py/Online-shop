@@ -1,37 +1,27 @@
 {% include "header.html" %}
 
+
+
+
 <div class="shop-container">
 
     <div class="shop">
         <div class="header">All items</div>
         <div class="items-container">
-
+            {% for item in store_data %}
             <div class="item">
                 <div class="wrap-item">
-                    <img class="item-img" src="{{url_for('static', filename='images/test.jpg')}}">
+                    <img class="item-img" src="{{url_for('static', filename='images/'+item.image)}}">
                     <div class="price-buy">
-                        <p class="item-price">7,70€</p>
-                        <a href="" class="buy-button">Add to cart</a>
+                        <p class="item-price">{{ "%.2f"|format(item.price) }}€</p>
+                        <a href="{{url_for('add_to_cart',item_id=item.id)}}" class="buy-button">Add to cart</a>
 
                     </div>
                 </div>
             </div>
-            <div class="item">
-                <div class="wrap-item">
-                    <img class="item-img" src="{{url_for('static', filename='images/test2.jpg')}}">
-                    <div class="price-buy">
-                        <p class="item-price">7,70€</p>
-                        <a href="" class="buy-button">Add to cart</a>
+            {% endfor %}
 
-                    </div>
-                </div>
-            </div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+
 
         </div>
     </div>
