@@ -6,8 +6,19 @@
     <div class="header">Your shopping cart</div>
     <div class="cart-items-container">
 
+      <div class="cart-listing-header">
+        <div>image</div>
+        <div>article</div>
+        <div>prix</div>
+        <div>qte</div>
+        <div>remove</div>
+
+      </div>
+
       <div class="cart-item">
-        <div class="cart-item-img">Image</div>
+        <div class="cart-item-img">
+          <img src="{{url_for('static', filename='images/test.jpg')}}" alt="">
+        </div>
         <div class="cart-item-name">Apple AirPods (2nd Generation)</div>
         <div class="cart-item-price">7,77€</div>
         <div class="cart-item-qty">1</div>
@@ -15,7 +26,9 @@
       </div>
 
       <div class="cart-item">
-        <div class="cart-item-img">Image</div>
+        <div class="cart-item-img">
+          <img src="{{url_for('static', filename='images/test2.jpg')}}" alt="">
+        </div>
         <div class="cart-item-name">Nintendo Switch with Gray Joy‑Con - HAC-001(-01)</div>
         <div class="cart-item-price">$315.00</div>
         <div class="cart-item-qty">1</div>
@@ -28,8 +41,8 @@
 
 
 
-  Estimated total
-  <a href="" class="buy-button">Purchase</a>
+  <div class="cart-total">Estimated total: <div class="cart-total-price">11111150,10€</div></div>
+  <a href="" class="purchase-button">Purchase</a>
 
 
 </div>
