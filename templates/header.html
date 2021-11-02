@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-
-    <meta charset="utf-8">
-    <title>Online shop</title>
-
-    <link rel="stylesheet" href="static/css/styles.css">
-
-</head>
 <body>
 <div class="custom-navbar">
 
@@ -16,14 +6,18 @@
         <div class="custom-nav-item">
             <a class="custom-nav-link" href="{{url_for('home')}}">Home</a>
         </div>
-                <div class="custom-nav-item">
+        <div class="custom-nav-item">
             <a class="custom-nav-link" href="#">Register</a>
         </div>
         <div class="custom-nav-item">
             <a class="custom-nav-link" href="#">Sign in</a>
         </div>
         <div class="custom-nav-item">
-            <a class="custom-nav-link" href="{{url_for('cart')}}">Cart</a>
+            <a class="custom-nav-link" href="{{url_for('cart')}}">Cart
+                {% if session.items_in_cart %}
+                ({{ session.items_in_cart }})
+                {% endif %}
+            </a>
         </div>
     </div>
 

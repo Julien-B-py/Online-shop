@@ -1,6 +1,6 @@
-id,item,price,image
-100,HP 302 Pack de 2 Cartouches d'Encre Noire et Trois Couleurs Authentiques (X4D37AE) ,29.49,01.jpg
-101,Dune [4K Ultra HD SteelBook] ,29.99,02.jpg
-102,VISION Drap Housse Marine - 90 x 190 cm - 100% Coton ,11.99,03.jpg
-103,BLACK SHIELD - Certification CE - Masque chirurgical MEDICAL noir - Lot de 50 +1pcs - TYPE 1 - Filtration EFB >95% - EN14683 ,11.99,04.jpg
-104,Pile de montre de Renata Renata fait-Swiss 371 ou SR 920 SW 1.5 V (1 x 371 ou SR 920 SW)  ,2.00,05.jpg
+id,item,price,image,stripe
+100,HP 302 Pack de 2 Cartouches d'Encre Noire et Trois Couleurs Authentiques (X4D37AE) ,29.49,01.jpg,price_1JrKdbALNNhEPM5IejGc72u0
+101,Dune [4K Ultra HD SteelBook] ,29.99,02.jpg,price_1JrKeIALNNhEPM5IEvEP0bo6
+102,VISION Drap Housse Marine - 90 x 190 cm - 100% Coton ,11.99,03.jpg,price_1JrKeoALNNhEPM5Iqdp4ZZox
+103,BLACK SHIELD - Certification CE - Masque chirurgical MEDICAL noir - Lot de 50 +1pcs - TYPE 1 - Filtration EFB >95% - EN14683 ,11.99,04.jpg,price_1JrKfQALNNhEPM5IaUVfsEcC
+104,Pile de montre de Renata Renata fait-Swiss 371 ou SR 920 SW 1.5 V (1 x 371 ou SR 920 SW)  ,2.00,05.jpg,price_1JrKfnALNNhEPM5INEu2vNdL
