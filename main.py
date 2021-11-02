@@ -8,6 +8,8 @@ import stripe
 from flask import Flask, render_template, url_for, flash, session
 from werkzeug.utils import redirect
 
+from forms import RegisterForm
+
 stripe.api_key = os.environ.get("STRIPE_API_KEY")
 
 app = Flask(__name__)
@@ -169,6 +171,19 @@ def checkout_success():
     session.modified = True
 
     return render_template("success.html")
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+        print(form.name.data)
+        print(form.email.data)
+        print(form.password.data)
+        print(form.password_confirmation.data)
+
+    return render_template("register.html", form=form)
 
 
 if __name__ == "__main__":
