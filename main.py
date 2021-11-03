@@ -62,8 +62,7 @@ def unauthorized():
 
 
 def manage_session(func):
-    """Manage user session by creating a new user cart if session does not exists"""
-
+    """Manages user session by creating a new user cart if session does not exists"""
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not session or not session.get('user_cart'):
@@ -86,6 +85,10 @@ def inject_data():
 @app.route("/")
 @manage_session
 def home():
+    """
+    Main route displaying all items.
+    Allows user to see items prices and add them to cart.
+    """
     session['items_in_cart'] = sum(session.get('user_cart', {"count": 0}).values())
     session.modified = True
     return render_template("index.html", store_data=store_data)
@@ -94,7 +97,12 @@ def home():
 @app.route("/add/<item_id>")
 @manage_session
 @login_required
-def add_to_cart(item_id):
+def add_to_cart(item_id: str):
+    """
+    Route to add item to user cart.
+        @param item_id: Specify the item id to add to user cart
+        @type item_id: str
+    """
     # Reading and updating session cart
     # Initialize item count value to 1 if not in cart already
     if item_id not in session.get('user_cart'):
@@ -121,7 +129,12 @@ def add_to_cart(item_id):
 @app.route("/remove/<item_id>")
 @manage_session
 @login_required
-def remove_from_cart(item_id):
+def remove_from_cart(item_id: str):
+    """
+    Route to remove item from user cart.
+        @param item_id: Specify the item id to remove from user cart
+        @type item_id: str
+    """
     # If item in user cart remove it
     if item_id in session['user_cart']:
         del session['user_cart'][item_id]
@@ -143,6 +156,9 @@ def remove_from_cart(item_id):
 @manage_session
 @login_required
 def clear_cart():
+    """
+    Route to remove all items from user cart.
+    """
     # If user cart has items clear it
     if session['user_cart']:
         session['user_cart'].clear()
@@ -164,6 +180,10 @@ def clear_cart():
 @manage_session
 @login_required
 def cart():
+    """
+    Route to display user cart.
+    Displays total price, items and items counts.
+    """
     # Initialize two lists and an integer to display cart data, checkout data and total price in HTML
     final_cart = []
     checkout = []
@@ -201,6 +221,11 @@ def cart():
 @manage_session
 @login_required
 def create_checkout_session():
+    """
+    Route to allow user payment.
+    Checks items in user cart.
+    Displays total price, items and items counts.
+    """
     if not session['user_cart']:
         flash("Your cart is empty.")
         return redirect(url_for("cart"))
@@ -259,6 +284,11 @@ def checkout_success():
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    """
+    Route to create an user account.
+    Checks if provided email address is not in use.
+    Hashes user password and save user info in database.
+    """
     form = RegisterForm()
 
     if form.validate_on_submit():
@@ -297,6 +327,12 @@ def register():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    """
+    Route to login on an existing user account.
+    Checks if provided email address is in database.
+    Checks if provided password matches the saved password.
+    Load user cart if exists.
+    """
     form = LoginForm()
 
     if form.validate_on_submit():
