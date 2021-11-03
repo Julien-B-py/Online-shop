@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Sign-In</title>
+
+    <link rel="stylesheet" href="static/css/styles.css">
+
+</head>
+
+
+{% include "header.html" %}
+<div class="shop-container">
+    <div class="shop">
+        <div class="header">Sign-In </div>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class=flashes>
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+
+        <form class="register-form" method="post" role="form">
+            {{ form.hidden_tag() }}
+
+
+
+
+            {{ form.email.label }}
+            <div>{{ form.email(size=50,class_="custom-form-field") }}</div>
+            {{ form.password.label }}
+            <div> {{ form.password(size=50,class_="custom-form-field") }}</div>
+
+
+            {{ form.submit(class_="custom-form-button") }}
+
+
+        </form>
+
+
+    </div>
+</div>
+{% include "footer.html" %}

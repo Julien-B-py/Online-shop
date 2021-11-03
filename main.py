@@ -1,3 +1,4 @@
+import json
 import os
 import pandas as pd
 from datetime import datetime, timedelta
@@ -6,9 +7,11 @@ from functools import wraps
 import stripe
 
 from flask import Flask, render_template, url_for, flash, session
+from flask_login import login_user, current_user, UserMixin, LoginManager, logout_user
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import redirect
 
-from forms import RegisterForm
+from forms import RegisterForm, LoginForm
 
 stripe.api_key = os.environ.get("STRIPE_API_KEY")
 
@@ -17,6 +20,28 @@ app.secret_key = os.environ.get("SECRET_KEY")
 
 # Define the life of the session object to timeout after 60 minutes
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    cart = db.Column(db.String())
+
+
+db.create_all()
 
 # Simulate database
 store_df = pd.read_csv("store.csv")
@@ -31,7 +56,7 @@ def manage_session(func):
         if not session:
             # Setting session cart
             session['user_cart'] = {}
-            session['items_in_cart'] = 0
+            session['items_in_cart'] = sum(session['user_cart'].values())
             session.modified = True
         return func(*args, **kwargs)
 
@@ -41,12 +66,14 @@ def manage_session(func):
 # Inject new values into the template context
 @app.context_processor
 def inject_year():
-    return {'year': datetime.now().year}
+    return {'year': datetime.now().year,
+            'current_user': current_user, }
 
 
 @app.route("/")
 @manage_session
 def home():
+    session['items_in_cart'] = sum(session['user_cart'].values())
     return render_template("index.html", store_data=store_data)
 
 
@@ -57,11 +84,16 @@ def add_to_cart(item_id):
     # Initialize item count value to 1 if not in cart already
     if item_id not in session['user_cart']:
         session['user_cart'][item_id] = 1
+
     # Increment item count if already in cart
     else:
         session['user_cart'][item_id] += 1
 
-    session['items_in_cart'] += 1
+    user = current_user
+    user.cart = json.dumps(session['user_cart'])
+    db.session.commit()
+
+    session['items_in_cart'] = sum(session['user_cart'].values())
     session.modified = True
 
     flash("The item was added to your shopping cart.")
@@ -74,8 +106,11 @@ def add_to_cart(item_id):
 def remove_from_cart(item_id):
     # If item in user cart remove it
     if item_id in session['user_cart']:
-        session['items_in_cart'] -= session['user_cart'].get(item_id)
         del session['user_cart'][item_id]
+        session['items_in_cart'] = sum(session['user_cart'].values())
+        user = current_user
+        user.cart = json.dumps(session['user_cart'])
+        db.session.commit()
 
         session.modified = True
         flash("The selected item has been removed.")
@@ -90,7 +125,11 @@ def clear_cart():
     # If user cart has items clear it
     if session['user_cart']:
         session['user_cart'].clear()
-        session['items_in_cart'] = 0
+        session['items_in_cart'] = sum(session['user_cart'].values())
+        user = current_user
+        user.cart = json.dumps(session['user_cart'])
+        db.session.commit()
+
         session.modified = True
         flash("All items have been removed.")
     else:
@@ -178,12 +217,56 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        print(form.name.data)
-        print(form.email.data)
-        print(form.password.data)
-        print(form.password_confirmation.data)
+        user = User(
+            name=form.name.data,
+            email=form.email.data,
+            password=form.password.data,
+            cart=json.dumps(session['user_cart']),
+        )
+
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+
+        flash("Account successfully created!")
+
+        return redirect(url_for("home"))
 
     return render_template("register.html", form=form)
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            flash('Incorrect email')
+            return redirect(url_for("login"))
+
+        if password != user.password:
+            flash('Incorrect password')
+            return render_template("login.html", form=form)
+
+        login_user(user)
+
+        session['user_cart'] = json.loads(user.cart)
+
+        return redirect(url_for("home"))
+
+    return render_template("login.html", form=form)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    session.clear()
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

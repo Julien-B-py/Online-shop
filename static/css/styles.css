@@ -213,6 +213,10 @@
     width: max-content;
 }
 
+.purchase-button:hover {
+    box-shadow: rgba(2, 48, 71, 0.24) 0px 3px 8px;
+}
+
 .shop {
     margin: 0 auto;
     max-width: 650px;

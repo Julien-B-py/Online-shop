@@ -6,12 +6,21 @@
         <div class="custom-nav-item">
             <a class="custom-nav-link" href="{{url_for('home')}}">Home</a>
         </div>
+        {% if not current_user.is_authenticated %}
         <div class="custom-nav-item">
             <a class="custom-nav-link" href="{{url_for('register')}}">Register</a>
         </div>
         <div class="custom-nav-item">
-            <a class="custom-nav-link" href="#">Sign in</a>
+            <a class="custom-nav-link" href="{{url_for('login')}}">Sign in</a>
         </div>
+        {% else %}
+        <div class="custom-nav-item">
+            <a class="custom-nav-link">Hello, {{ current_user.name }}</a>
+        </div>
+        <div class="custom-nav-item">
+            <a class="custom-nav-link" href="{{url_for('logout')}}">Sign Out</a>
+        </div>
+        {% endif %}
         <div class="custom-nav-item">
             <a class="custom-nav-link" href="{{url_for('cart')}}">Cart
                 {% if session.items_in_cart %}
