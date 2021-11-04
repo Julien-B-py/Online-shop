@@ -24,7 +24,11 @@ app.secret_key = os.environ.get("SECRET_KEY")
 # Define the life of the session object to timeout after 60 minutes
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'sqlite:///users.db')
+DATABASE_URL = os.environ.get("DATABASE_URL", 'sqlite:///users.db')
+# Fix sqlalchemy.exc.NoSuchModuleError: Can't load plugin: sqlalchemy.dialects:postgres on heroku
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
