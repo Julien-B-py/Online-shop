@@ -14,6 +14,8 @@ from werkzeug.utils import redirect
 
 from forms import RegisterForm, LoginForm
 
+domain_url = os.environ.get('DOMAIN')
+
 stripe.api_key = os.environ.get("STRIPE_API_KEY")
 
 app = Flask(__name__)
@@ -22,17 +24,10 @@ app.secret_key = os.environ.get("SECRET_KEY")
 # Define the life of the session object to timeout after 60 minutes
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'sqlite:///users.db')
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 
 # Define User data-model
@@ -42,12 +37,21 @@ class User(db.Model, UserMixin):
     # User Authentication fields
     name = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
+    password = db.Column(db.String(200))
     # User field
     cart = db.Column(db.String())
 
 
 db.create_all()
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 # Simulate database for store products
 store_df = pd.read_csv("store.csv")
@@ -63,6 +67,7 @@ def unauthorized():
 
 def manage_session(func):
     """Manages user session by creating a new user cart if session does not exists"""
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         if not session or not session.get('user_cart'):
@@ -243,8 +248,8 @@ def create_checkout_session():
             line_items=session["checkout"],
             payment_method_types=['card'],
             mode='payment',
-            success_url="http://127.0.0.1:5000/success",
-            cancel_url="http://127.0.0.1:5000/cancel",
+            success_url=domain_url + "/success",
+            cancel_url=domain_url + "/cancel",
 
         )
 
@@ -375,4 +380,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
